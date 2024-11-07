@@ -21,6 +21,7 @@ use VDM\Joomla\Componentbuilder\Compiler\Factory as CFactory;
 use Joomla\CMS\Version;
 use VDM\Joomla\Componentbuilder\File\Factory as FileFactory;
 use VDM\Joomla\Componentbuilder\Import\Factory as ImportFactory;
+use VDM\Joomla\Abstraction\Console\Import;
 use VDM\Joomla\Utilities\ArrayHelper as UtilitiesArrayHelper;
 use VDM\Joomla\Utilities\StringHelper;
 use Joomla\CMS\Uri\Uri;
@@ -76,6 +77,8 @@ class CompilerController extends AdminController
 	 * FileFactory
 	 * Adding this so that the import factory gets build for Super Powers
 	 * ImportFactory
+	 * Adding this so that the import cli gets build for Super Powers
+	 * Import
 	 */
 
 	/**

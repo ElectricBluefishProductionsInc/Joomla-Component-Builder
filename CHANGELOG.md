@@ -1,9 +1,6 @@
-# v5.0.4-alpha3
+# v5.0.4-beta1
 
-- Fix Save failed issue in dynamicGet. #1148
-- Move all [TEXT, EDITOR, TEXTAREA] fields from [NOT NULL] to [NULL]
-- Add the DateHelper class and improve the date methods.
-- Add simple SessionHelper class.
+- Add first classes for the new import engine.
 
 # v5.0.4-alpha
 
@@ -14,6 +11,10 @@
 - Move the setDocument and _prepareDocument above the display in the site view and custom admin view.
 - Update the trashhelper layout to work in Joomla 5.
 - Add AllowDynamicProperties (Joomla 4+5) to view class to allow Custom Dynamic Get methods to work without issues.
+- Fix Save failed issue in dynamicGet. #1148
+- Move all [TEXT, EDITOR, TEXTAREA] fields from [NOT NULL] to [NULL]
+- Add the DateHelper class and improve the date methods.
+- Add simple SessionHelper class.
 
 # v5.0.3
 

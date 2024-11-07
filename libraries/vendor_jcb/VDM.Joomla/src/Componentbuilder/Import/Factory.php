@@ -12,10 +12,12 @@
 namespace VDM\Joomla\Componentbuilder\Import;
 
 
+use Joomla\DI\Container;
 use VDM\Joomla\Service\Table;
 use VDM\Joomla\Service\Database;
 use VDM\Joomla\Service\Model;
 use VDM\Joomla\Service\Data;
+use VDM\Joomla\Componentbuilder\Import\Service\Import;
 use VDM\Joomla\Componentbuilder\File\Service\File;
 use VDM\Joomla\Componentbuilder\Service\Spreadsheet;
 use VDM\Joomla\Interfaces\FactoryInterface;
@@ -50,6 +52,7 @@ abstract class Factory extends ExtendingFactory implements FactoryInterface
 			->registerServiceProvider(new Database())
 			->registerServiceProvider(new Model())
 			->registerServiceProvider(new Data())
+			->registerServiceProvider(new Import())
 			->registerServiceProvider(new File())
 			->registerServiceProvider(new Spreadsheet());
 	}
