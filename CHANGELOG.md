@@ -1,4 +1,14 @@
-# v5.0.4-beta1
+# v5.0.4-beta2
+
+- Improve the [VDM Registry] to be Joomla Registry Compatible
+- Move all registries to the [VDM Registry] class
+- Fix Checked Out to be null and not 0. (#1194)
+- Fix created_by, modified_by, checked_out fields in the compiler of the SQL. (#1194)
+- Update all core date fields in table class. (#1188)
+- Update created_by, modified_by, checked_out fields in table class.
+- Implementation of the decentralized Super-Power CORE repository network. (#1190)
+
+# v5.0.4-beta
 
 - Add first classes for the new import engine.
 

@@ -15,6 +15,7 @@ use Joomla\CMS\HTML\HTMLHelper as Html;
 use VDM\Component\Componentbuilder\Administrator\Helper\ComponentbuilderHelper;
 use VDM\Joomla\Utilities\StringHelper;
 use VDM\Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\User\UserFactoryInterface;
 
 // No direct access to this file
 defined('_JEXEC') or die;
@@ -96,8 +97,8 @@ $can = ComponentbuilderHelper::getActions('field');
 	<?php
 		$canCheckin = $user->authorise('core.manage', 'com_checkin') || $item->checked_out == $user->id || $item->checked_out == 0;
 		$userChkOut = Factory::getContainer()->
-			get(\Joomla\CMS\User\UserFactoryInterface::class)->
-				loadUserById($item->checked_out);
+			get(UserFactoryInterface::class)->
+				loadUserById($item->checked_out ?? 0);
 		$canDo = ComponentbuilderHelper::getActions('field',$item,'fields');
 	?>
 	<tr>
