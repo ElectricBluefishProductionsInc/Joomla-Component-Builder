@@ -1,5 +1,11 @@
-# v5.0.4-beta2
+# v5.0.4-beta3
 
+- Fix the noticeboard to display Llewellyn's Joomla Social feed
+- Started compiling JCB5 on Joomla 5 with PHP 8.2
+
+# v5.0.4-beta
+
+- Add first classes for the new import engine.
 - Improve the [VDM Registry] to be Joomla Registry Compatible
 - Move all registries to the [VDM Registry] class
 - Fix Checked Out to be null and not 0. (#1194)
@@ -7,10 +13,6 @@
 - Update all core date fields in table class. (#1188)
 - Update created_by, modified_by, checked_out fields in table class.
 - Implementation of the decentralized Super-Power CORE repository network. (#1190)
-
-# v5.0.4-beta
-
-- Add first classes for the new import engine.
 
 # v5.0.4-alpha
 

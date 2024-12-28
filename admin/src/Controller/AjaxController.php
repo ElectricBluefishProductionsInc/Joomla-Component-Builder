@@ -49,8 +49,6 @@ class AjaxController extends BaseController
 		$this->app->setHeader('Content-Disposition','attachment;filename="getajax.json"');
 		$this->app->setHeader('Access-Control-Allow-Origin', '*');
 		// load the tasks
-		$this->registerTask('isNew', 'ajax');
-		$this->registerTask('isRead', 'ajax');
 		$this->registerTask('getComponentDetails', 'ajax');
 		$this->registerTask('getCronPath', 'ajax');
 		$this->registerTask('getWiki', 'ajax');
@@ -120,104 +118,6 @@ class AjaxController extends BaseController
 			$task = $this->getTask();
 			switch($task)
 			{
-				case 'isNew':
-					try
-					{
-						$noticeValue = $jinput->get('notice', NULL, 'STRING');
-						if($noticeValue && $user->id != 0)
-						{
-							$ajaxModule = $this->getModel('ajax', 'Administrator');
-							if ($ajaxModule)
-							{
-								$result = $ajaxModule->isNew($noticeValue);
-							}
-							else
-							{
-								$result = ['error' => 'There was an error! [149]'];
-							}
-						}
-						else
-						{
-							$result = ['error' => 'There was an error! [149]'];
-						}
-						if($callback)
-						{
-							echo $callback . "(".json_encode($result).");";
-						}
-						elseif($returnRaw)
-						{
-							echo json_encode($result);
-						}
-						else
-						{
-							echo "(".json_encode($result).");";
-						}
-					}
-					catch(\Exception $e)
-					{
-						if($callback)
-						{
-							echo $callback."(".json_encode($e).");";
-						}
-						elseif($returnRaw)
-						{
-							echo json_encode($e);
-						}
-						else
-						{
-							echo "(".json_encode($e).");";
-						}
-					}
-				break;
-				case 'isRead':
-					try
-					{
-						$noticeValue = $jinput->get('notice', NULL, 'STRING');
-						if($noticeValue && $user->id != 0)
-						{
-							$ajaxModule = $this->getModel('ajax', 'Administrator');
-							if ($ajaxModule)
-							{
-								$result = $ajaxModule->isRead($noticeValue);
-							}
-							else
-							{
-								$result = ['error' => 'There was an error! [149]'];
-							}
-						}
-						else
-						{
-							$result = ['error' => 'There was an error! [149]'];
-						}
-						if($callback)
-						{
-							echo $callback . "(".json_encode($result).");";
-						}
-						elseif($returnRaw)
-						{
-							echo json_encode($result);
-						}
-						else
-						{
-							echo "(".json_encode($result).");";
-						}
-					}
-					catch(\Exception $e)
-					{
-						if($callback)
-						{
-							echo $callback."(".json_encode($e).");";
-						}
-						elseif($returnRaw)
-						{
-							echo json_encode($e);
-						}
-						else
-						{
-							echo "(".json_encode($e).");";
-						}
-					}
-				break;
 				case 'getComponentDetails':
 					try
 					{

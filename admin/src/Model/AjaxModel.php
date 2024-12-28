@@ -202,35 +202,89 @@ class AjaxModel extends ListModel
 	}
 
 	/**
-	* 	set the component display
-	**/
+	 * Generate the component details display in HTML.
+	 *
+	 * @param object $object The component object containing details.
+	 * @return string The HTML string for displaying component details.
+	 */
 	protected function componentDetailsDisplay($object)
 	{
-		// set some vars
-		$image = (StringHelper::check($object->image)) ? '<img alt="Joomla Component Image" src="'. Uri::root() . $object->image . '" style="float: right;">': '';
-		$desc = (StringHelper::check($object->description)) ? $object->description : $object->short_description;
-		$placeholder = ($object->add_placeholders == 1) ? '<span class="btn btn-small btn-success"> ' . Text::_('COM_COMPONENTBUILDER_YES') . ' </span>' : '<span class="btn btn-small btn-danger"> ' .Text::_('COM_COMPONENTBUILDER_NO') . ' </span>' ;
-		$debug = ($object->debug_linenr == 1) ? '<span class="btn btn-small btn-success"> ' .Text::_('COM_COMPONENTBUILDER_YES') . '</span>'  : ' <span class="btn btn-small btn-danger"> ' .Text::_('COM_COMPONENTBUILDER_NO') . ' </span>' ;
-		$html = array();
-		$html[] = '<h3>' . $object->name . ' (v' . $object->component_version . ')</h3>';
-		$html[] = '<p>' . $desc . $image . '</p>';
-		$html[] = '<ul>';
-		$html[] = '<li>' . Text::_('COM_COMPONENTBUILDER_COMPANY') . ': <b>' . $object->companyname . '</b></li>';
-		$html[] = '<li>' . Text::_('COM_COMPONENTBUILDER_AUTHOR') . ': <b>' . $object->author . '</b></li>';
-		$html[] = '<li>' . Text::_('COM_COMPONENTBUILDER_EMAIL') . ': <b>' . $object->email . '</b></li>';
-		$html[] = '<li>' . Text::_('COM_COMPONENTBUILDER_WEBSITE') . ': <b>' . $object->website . '</b></li>';
-		$html[] = '</ul>';
-		$html[] = '<h4>' . Text::_('COM_COMPONENTBUILDER_COMPONENT_GLOBAL_SETTINGS') . '</h4>';
+		// Helper variables with null coalescing to ensure robust value assignment
+		$imageSrc = !empty($object->image) ? htmlspecialchars($object->image, ENT_QUOTES) : null;
+		$image = $imageSrc 
+			? '<img alt="' . Text::_('COM_COMPONENTBUILDER_JOOMLA_COMPONENT_IMAGE') . '" src="' . Uri::root() . $imageSrc . '" class="img-fluid" style="max-width: 250px;">'
+			: null;
+
+		$description = htmlspecialchars(!empty($object->description) ? $object->description : $object->short_description, ENT_QUOTES);
+
+		$placeholderStatus = $object->add_placeholders
+			? '<span class="badge bg-success">' . Text::_('COM_COMPONENTBUILDER_YES') . '</span>'
+			: '<span class="badge bg-danger">' . Text::_('COM_COMPONENTBUILDER_NO') . '</span>';
+
+		$debugStatus = $object->debug_linenr
+			? '<span class="badge bg-success">' . Text::_('COM_COMPONENTBUILDER_YES') . '</span>'
+			: '<span class="badge bg-danger">' . Text::_('COM_COMPONENTBUILDER_NO') . '</span>';
+
+		// Author and company details
+		$companyDetails = '<ul class="list-unstyled">';
+		$companyDetails .= '<li><strong>' . Text::_('COM_COMPONENTBUILDER_COMPANY') . ':</strong> ' . htmlspecialchars($object->companyname ?? 'Vast Development Method', ENT_QUOTES) . '</li>';
+		$companyDetails .= '<li><strong>' . Text::_('COM_COMPONENTBUILDER_AUTHOR') . ':</strong> ' . htmlspecialchars($object->author ?? 'Llewellyn van der Merwe', ENT_QUOTES) . '</li>';
+		$companyDetails .= '<li><strong>' . Text::_('COM_COMPONENTBUILDER_EMAIL') . ':</strong> <a href="mailto:' . htmlspecialchars($object->email ?? 'joomla@vdm.io', ENT_QUOTES) . '">' . htmlspecialchars($object->email ?? 'joomla@vdm.io', ENT_QUOTES) . '</a></li>';
+		$companyDetails .= '<li><strong>' . Text::_('COM_COMPONENTBUILDER_WEBSITE') . ':</strong> <a href="' . htmlspecialchars($object->website ?? 'https://dev.vdm.io', ENT_QUOTES) . '" target="_blank" rel="noopener">' . htmlspecialchars($object->website ?? 'https://dev.vdm.io', ENT_QUOTES) . '</a></li>';
+		$companyDetails .= '</ul>';
+
+		// Build HTML output
+		$html = [];
+
+		// Card container
+		$html[] = '<div class="card mb-4">';
+		$html[] = '<div class="card-body">';
+
+		// Header with component name and version
+		$html[] = '<h2 class="card-title">' . htmlspecialchars($object->name, ENT_QUOTES) . ' (v' . htmlspecialchars($object->component_version, ENT_QUOTES) . ')</h2>';
+
+		// Row with image and text
+		if (!empty($image))
+		{
+			$html[] = '<div class="row align-items-center">';
+			$html[] = '<div class="col-md-7">';
+			$html[] = '<p>' . $description . '</p>';
+			$html[] = $companyDetails;
+			$html[] = '</div>';
+			$html[] = '<div class="col-md-5">' . $image . '</div>';
+			$html[] = '</div>'; // End row
+		}
+		else
+		{
+			$html[] = '<div class="row align-items-center">';
+			$html[] = '<p>' . $description . '</p>';
+			$html[] = $companyDetails;
+			$html[] = '</div>';
+		}
+
+		// Component settings
+		$html[] = '<h3 class="mt-4">' . Text::_('COM_COMPONENTBUILDER_COMPONENT_SETTINGS') . '</h3>';
 		$html[] = '<p>';
-		$html[] = Text::_('COM_COMPONENTBUILDER_ADD_CUSTOM_CODE_PLACEHOLDERS') . '<br />' . $placeholder . '<br />';
-		$html[] = Text::_('COM_COMPONENTBUILDER_DEBUG_LINE_NUMBERS') . '<br />' . $debug ;
+		$html[] = Text::_('COM_COMPONENTBUILDER_ADD_CUSTOM_CODE_PLACEHOLDERS') . ': ' . $placeholderStatus . '<br>';
+		$html[] = Text::_('COM_COMPONENTBUILDER_DEBUG_LINE_NUMBERS') . ': ' . $debugStatus;
 		$html[] = '</p>';
-		$html[] = '<h4>' . Text::_('COM_COMPONENTBUILDER_LICENSE') . '</h4>';
-		$html[] = '<p>' . $object->license . '</p>';
-		$html[] = '<h4>' . Text::_('COM_COMPONENTBUILDER_COPYRIGHT') . '</h4>';
-		$html[] = '<p>' . $object->copyright . '<br /><br />';
-		$html[] = '<a href="index.php?option=com_componentbuilder&ref=compiler&view=joomla_components&task=joomla_component.edit&id=' . (int) $object->id . '" class="btn btn-small span12"><span class="icon-edit"></span> ' . Text::_('COM_COMPONENTBUILDER_EDIT') . ' ' .$object->system_name . '</a></p>';
-		// now return the diplay
+
+		// License details
+		$html[] = '<h3 class="mt-4">' . Text::_('COM_COMPONENTBUILDER_LICENSE') . '</h3>';
+		$html[] = '<p>' . nl2br(htmlspecialchars($object->license, ENT_QUOTES)) . '</p>';
+
+		// Copyright
+		$html[] = '<h3 class="mt-4">' . Text::_('COM_COMPONENTBUILDER_COPYRIGHT') . '</h3>';
+		$html[] = '<p>' . nl2br(htmlspecialchars($object->copyright, ENT_QUOTES)) . '</p>';
+
+		// Edit button
+		$html[] = '<a href="index.php?option=com_componentbuilder&ref=compiler&view=joomla_components&task=joomla_component.edit&id=' . (int)$object->id . '" class="btn btn-outline-action btn-lg mt-3" style="width: 100%;">';
+		$html[] = '<span class="icon-edit"></span> ' . Text::_('COM_COMPONENTBUILDER_EDIT') . ' ' . htmlspecialchars($object->system_name, ENT_QUOTES);
+		$html[] = '</a>';
+
+		$html[] = '</div>'; // End card body
+		$html[] = '</div>'; // End card
+
 		return implode("\n", $html);
 	}
 
@@ -272,55 +326,6 @@ class AjaxModel extends ListModel
 	protected function hasCurl()
 	{
 		return function_exists('curl_version');
-	}
-
-	/**
-	 * Check and if a notice is new (per/user)
-	 *
-	 * @param string|null    $notice   The current notice
-	 *
-	 * @return  bool  true if is new
-	 * @since   2.0.0
-	 */
-	public function isNew(?string $notice): bool
-	{
-		// first get the file path
-		$path_filename = FileHelper::getPath('path', 'usernotice', 'md', Factory::getUser()->username, JPATH_COMPONENT_ADMINISTRATOR);
-
-		// check if the file is set
-		if (($content = FileHelper::getContent($path_filename, FALSE)) !== FALSE)
-		{
-			if ($notice == $content)
-			{
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * Check if a notice has been read (per/user)
-	 *
-	 * @param string|null    $notice   The current notice
-	 *
-	 * @return  bool  true if is read
-	 * @since   2.0.0
-	 */
-	public function isRead(?string $notice): bool
-	{
-		// first get the file path
-		$path_filename = FileHelper::getPath('path', 'usernotice', 'md', Factory::getUser()->username, JPATH_COMPONENT_ADMINISTRATOR);
-
-		// set as read if not already set
-		if (($content = FileHelper::getContent($path_filename, FALSE)) !== FALSE)
-		{
-			if ($notice == $content)
-			{
-				return true;
-			}
-		}
-
-		return FileHelper::write($path_filename, $notice);
 	}
 
 	/**
@@ -3780,7 +3785,7 @@ class AjaxModel extends ListModel
 	 * @return  array|null
 	 * @since   3.2.0
 	 **/
-	public function replaceAll(string $tableName, string $searchValue, ?string $replaceValue = null,
+	public function replaceAll(string $tableName, string $searchValue, ?string $replaceValue,
 		int $matchCase, int $wholeWord, int $regexSearch, int $componentId): ?array
 	{
 		// check if this is a valid table
@@ -3827,7 +3832,7 @@ class AjaxModel extends ListModel
 	 * @since   3.2.0
 	 **/
 	public function getSearchValue(string $fieldName, int $rowId, string $tableName,
-		string $searchValue, ?string $replaceValue = null, int $matchCase, int $wholeWord, int $regexSearch): array
+		string $searchValue, ?string $replaceValue, int $matchCase, int $wholeWord, int $regexSearch): array
 	{
 		// check if this is a valid table and field
 		if ($rowId > 0 && SearchFactory::_('Table')->exist($tableName, $fieldName))
@@ -3874,7 +3879,7 @@ class AjaxModel extends ListModel
 	 * @since   3.2.0
 	 **/
 	public function getReplaceValue(string $fieldName, int $rowId, $line, string $tableName,
-		string $searchValue, ?string $replaceValue = null, int $matchCase, int $wholeWord, int $regexSearch): array
+		string $searchValue, ?string $replaceValue, int $matchCase, int $wholeWord, int $regexSearch): array
 	{
 		// check if this is a valid table and field
 		if ($rowId > 0 && SearchFactory::_('Table')->exist($tableName, $fieldName))

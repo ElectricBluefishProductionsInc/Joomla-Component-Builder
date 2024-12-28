@@ -97,7 +97,7 @@ class HtmlView extends BaseHtmlView
 		// set page title
 		$this->getDocument()->setTitle(Text::_('COM_###COMPONENT###_DASHBOARD'));
 		// add manifest to page JavaScript
-		$this->getDocument()->addScriptDeclaration("var manifest = JSON.parse('" . json_encode($this->manifest) . "');", "text/javascript");
+		$this->getDocument()->addScriptDeclaration("var manifest = JSON.parse(" . json_encode($this->manifest) . ");", "text/javascript");
 		// add styles
 		foreach ($this->styles as $style)
 		{

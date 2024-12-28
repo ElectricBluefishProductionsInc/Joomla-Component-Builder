@@ -48,7 +48,6 @@ class HtmlView extends BaseHtmlView
 		// get the manifest details of the component
 		$this->manifest = ComponentbuilderHelper::manifest();
 		$this->wiki = $this->get('Wiki');
-		$this->noticeboard = $this->get('Noticeboard');
 		$this->readme = $this->get('Readme');
 		$this->version = $this->get('Version');
 
@@ -103,7 +102,7 @@ class HtmlView extends BaseHtmlView
 		// set page title
 		$this->getDocument()->setTitle(Text::_('COM_COMPONENTBUILDER_DASHBOARD'));
 		// add manifest to page JavaScript
-		$this->getDocument()->addScriptDeclaration("var manifest = JSON.parse('" . json_encode($this->manifest) . "');", "text/javascript");
+		$this->getDocument()->addScriptDeclaration("var manifest = JSON.parse(" . json_encode($this->manifest) . ");", "text/javascript");
 		// add styles
 		foreach ($this->styles as $style)
 		{
